@@ -6,33 +6,45 @@ import java.util.*;
 public class MatrixIO {
 
     public static void main(String... args) {
-        MatrixIO.gauss(MatrixIO.readMatrix("matrix.txt"));
-        //MatrixIO.gauss(new GaussMatrix(20));
+        MatrixIO.printHeader();
+        while (true) {
+            MatrixIO.gauss(readMatrix());
+        }
+    }
+
+    public static void printHeader() {
+        System.out.println("Программа для решения СЛАУ методом Гаусса с выбором главного элемента.");
     }
 
     public static GaussMatrix readMatrix() {
         Scanner in = new Scanner(System.in);
         while (true) {
             try {
-                System.out.print("Введите 0 чтобы ввести матрицу с клавиатуры,\n 1 для заполнения случайными значениями,\n 2 для считывания из файла: ");
-                int n = in.nextInt();
-                switch (n) {
-                    case 0:
+                System.out.print("Для начала работы введите 0 чтобы ввести матрицу с клавиатуры," +
+                        "\n 1 для заполнения случайными значениями," +
+                        "\n 2 для считывания из файла " +
+                        "\n q или 3 для выхода из программы: ");
+                String token = in.next();
+                switch (token) {
+                    case "0":
                         return readMatrix(in);
-                    case 1:
+                    case "1":
                         return new GaussMatrix(readSize(in));
-                    case 2:
+                    case "2":
                         GaussMatrix gaussMatrix = null;
                         while (gaussMatrix == null) {
-                            System.out.print("Введите путь к файлу(файл должен состоять из n(n+1) чисел): ");
+                            System.out.print("Введите путь к файлу(файл должен состоять из n(n+1) чисел, где n - количество неизвестных): ");
                             gaussMatrix = readMatrix(in.next());
                         }
                         return gaussMatrix;
+                    case "3":
+                    case "q":
+                        System.exit(0);
                     default:
                         throw new IllegalArgumentException();
                 }
             } catch (Exception e) {
-                System.out.println("Неверное число, повторите ввод.");
+                System.out.println("Неверный символ, повторите ввод.");
                 in.nextLine();
             }
         }
@@ -119,6 +131,7 @@ public class MatrixIO {
                 out.printf("%" + fieldWidth + "." + precision + "f", gaussMatrix.getMatrix()[i][j]);
             out.println();
         }
+        out.println();
     }
 
     public static void printMatrixOrdered(GaussMatrix gaussMatrix) {
@@ -144,18 +157,24 @@ public class MatrixIO {
         }
         var result = new GaussMatrix(matrix);
         printMatrix(result);
+        out.println();
     }
 
     public static void gauss(GaussMatrix gaussMatrix) {
         gaussMatrix.triangleMatrix();
         System.out.printf("Определитель матрицы = %5.5f\n", gaussMatrix.determinant());
         printMatrix(gaussMatrix);
-        printRoots(gaussMatrix.roots());
+        printValues(gaussMatrix.roots(),true);
+        printValues(gaussMatrix.discrepancies(), false);
     }
 
-    public static void printRoots(double[] roots) {
+    /*
+    @param areRoots - если true, то печатает корни, иначе - невязки
+     */
+    public static void printValues(double[] roots, boolean areRoots) {
+        String token = areRoots ? "x" : "δ";
         for (int i = 0; i < roots.length; ++i)
-            System.out.printf("x" + i + " = %5.5f", roots[i]);
+            System.out.printf(token + (i+1) + " = %5.16f\n", roots[i]);
         System.out.println();
     }
 

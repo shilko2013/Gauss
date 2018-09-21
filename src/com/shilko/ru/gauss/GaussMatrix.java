@@ -51,11 +51,11 @@ public class GaussMatrix {
         return this;
     }
 
-    public GaussMatrix randomInit(int MAX_RANDOM_VALUE) {
+    public GaussMatrix randomInit(int maxRandomValue) {
         var random = new Random();
         for (int i = 0; i < matrix.length; ++i)
             for (int j = 0; j < matrix[0].length; ++j) {
-                matrix[i][j] = random.nextDouble() * MAX_RANDOM_VALUE;
+                matrix[i][j] = random.nextDouble() * maxRandomValue;
                 if (random.nextBoolean())
                     matrix[i][j] *= -1;
             }
@@ -98,13 +98,13 @@ public class GaussMatrix {
                 }
             }
 
-            for (int j = iteration; j < n + 1; ++j) { //формирование треугольной матрицы
+            for (int j = 0; j < n + 1; ++j) { //формирование треугольной матрицы
                 double temp = matrix[iteration][j];
                 matrix[iteration][j] = matrix[maxi][j];
                 matrix[maxi][j] = temp;
             }
 
-            for (int i = iteration; i < n; ++i) {
+            for (int i = 0; i < n; ++i) {
                 double temp = matrix[i][iteration];
                 matrix[i][iteration] = matrix[i][maxj];
                 matrix[i][maxj] = temp;
@@ -114,26 +114,57 @@ public class GaussMatrix {
             equalVars[iteration] = equalVars[maxj];
             equalVars[maxj] = temp;
 
+            MatrixIO.printMatrix(this);
         }
 
         return this;
     }
 
-    public double determinant() {
+    public double determinant() { //работает только после triangleMatrix()
         double acc = 1;
         for (int i = 0; i < matrix.length; ++i)
             acc *= matrix[i][i];
         return acc;
-    } //работает только после triangleMatrix()
+    }
 
     public double[] roots() { //работает только после triangleMatrix()
         var roots = new double[matrix.length];
 
+        for (int rootNumber = roots.length - 1; rootNumber >= 0; --rootNumber) { //подсчет корней
+            double different = 0;
+            for (int j = rootNumber; j < matrix[0].length - 1; ++j) {
+                different += matrix[rootNumber][j] * roots[j];
+            }
+            roots[rootNumber] = (matrix[rootNumber][matrix[0].length - 1] - different) / matrix[rootNumber][rootNumber];
+        }
 
-
-        //roots[matrix.length - 1] = matrix[matrix.length-1][matrix[0].length-1] / matrix[matrix.length-1][matrix[0].length-2];
-        //roots[matrix.length - 2] = matrix[matrix.length-2][matrix[0].length-1] - matrix[matrix.length-2][matrix[0].length-2]*roots[matrix.length - 1] / matrix[matrix.length-2][matrix[0].length-3];
+        var equalTable = equalVars;
+        for (int i = 0; i < roots.length; ++i) {
+            int j;
+            for (j = 0; j < roots.length; ++j)
+                if (equalTable[j] == i)
+                    break;
+            int temp = equalTable[i];
+            equalTable[i] = equalTable[j];
+            equalTable[j] = temp;
+            double temp1 = roots[j];
+            roots[j] = roots[i];
+            roots[i] = temp1;
+        }
 
         return roots;
+    }
+
+    public double[] discrepancies() { //работает только после triangleMatrix()
+        var roots = roots();
+        var discrepancies = new double[roots.length];
+        for (int i = 0; i < roots.length; ++i) {
+            double leftSide = 0;
+            for (int j = 0; j < originalMatrix.length; ++j)
+                leftSide += originalMatrix[i][j] * roots[j];
+            discrepancies[i] = originalMatrix[i][originalMatrix.length] - leftSide;
+        }
+
+        return discrepancies;
     }
 }
