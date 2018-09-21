@@ -8,11 +8,6 @@ public class GaussMatrix {
     private double[][] matrix;
     private int[] equalVars;
 
-    public static void main(String... args) {
-        //MatrixIO.printMatrix(MatrixIO.readMatrix("matrix.txt").gauss());
-        new GaussMatrix(20).gauss();
-    }
-
     public double[][] getMatrix() {
         return matrix;
     }
@@ -66,8 +61,7 @@ public class GaussMatrix {
             equalVars[i] = i;
     }
 
-    public GaussMatrix gauss() { //changes matrix
-
+    public GaussMatrix triangleMatrix() {
         for (int iteration = 0; iteration < matrix.length - 1; ++iteration) {
 
             int n = matrix.length;
@@ -85,15 +79,15 @@ public class GaussMatrix {
                 }
             }
 
-            double[] koef = new double[n]; //нахождение коэффициентов для умножения строк
+            double[] koefs = new double[n]; //нахождение коэффициентов для умножения строк
             for (int i = iteration; i < n; ++i)
-                koef[i] = -matrix[i][maxj] / max;
+                koefs[i] = -matrix[i][maxj] / max;
 
             for (int i = iteration; i < n; ++i) { //сложение строк
                 for (int j = iteration; j < n + 1; ++j) {
                     if (i == maxi)
                         continue;
-                    matrix[i][j] += matrix[maxi][j] * koef[i];
+                    matrix[i][j] += matrix[maxi][j] * koefs[i];
                 }
             }
 
@@ -113,11 +107,15 @@ public class GaussMatrix {
             equalVars[iteration] = equalVars[maxj];
             equalVars[maxj] = temp;
 
-            MatrixIO.printMatrix(this);
-            System.out.println();
-
         }
 
         return this;
     }
+
+    public double determinant() {
+        double acc = 1;
+        for (int i = 0; i < matrix.length; ++i)
+            acc *= matrix[i][i];
+        return acc;
+    } //работает только после triangleMatrix()
 }

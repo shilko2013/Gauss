@@ -5,6 +5,11 @@ import java.util.*;
 
 public class MatrixIO {
 
+    public static void main(String... args) {
+        //MatrixIO.gauss(MatrixIO.readMatrix("matrix.txt"));
+        MatrixIO.gauss(new GaussMatrix(20));
+    }
+
     public static GaussMatrix readMatrix() {
         Scanner in = new Scanner(System.in);
         while (true) {
@@ -101,19 +106,50 @@ public class MatrixIO {
     }
 
     public static void printMatrix(GaussMatrix gaussMatrix, PrintStream out) {
-        final int fieldWidth = 10;
+        final int fieldWidth = 11;
         final int precision = 5;
         for (int i = 0; i < gaussMatrix.getMatrix().length; ++i) {
-            String temp = "x" + (gaussMatrix.getEqualVars()[i]+1);
-            out.printf("%"+fieldWidth+"s", temp);
+            String temp = "x" + (gaussMatrix.getEqualVars()[i] + 1);
+            out.printf("%" + fieldWidth + "s", temp);
         }
-        out.printf("%"+fieldWidth+"c", 'b');
+        out.printf("%" + fieldWidth + "c", 'b');
         out.println();
         for (int i = 0; i < gaussMatrix.getMatrix().length; ++i) {
             for (int j = 0; j < gaussMatrix.getMatrix()[0].length; ++j)
-                out.printf("%" + fieldWidth + "." + precision + "f ", gaussMatrix.getMatrix()[i][j]);
+                out.printf("%" + fieldWidth + "." + precision + "f", gaussMatrix.getMatrix()[i][j]);
             out.println();
         }
+    }
+
+    public static void printMatrixOrdered(GaussMatrix gaussMatrix) {
+        printMatrixOrdered(gaussMatrix, System.out);
+    }
+
+    public static void printMatrixOrdered(GaussMatrix gaussMatrix, PrintStream out) {
+        var matrix = gaussMatrix.getMatrix();
+        var equalVars = gaussMatrix.getEqualVars();
+        for (int i = 0; i < matrix.length; ++i) {
+            int j;
+            for (j = 0; j < matrix.length; ++j)
+                if (equalVars[j] == i)
+                    break;
+            int temp = equalVars[i];
+            equalVars[i] = equalVars[j];
+            equalVars[j] = temp;
+            for (int k = 0; k < matrix.length; ++k) {
+                double temp1 = matrix[k][j];
+                matrix[k][j] = matrix[k][i];
+                matrix[k][i] = temp1;
+            }
+        }
+        var result = new GaussMatrix(matrix);
+        printMatrix(result);
+    }
+
+    public static void gauss(GaussMatrix gaussMatrix) {
+        gaussMatrix.triangleMatrix();
+        System.out.printf("Определитель матрицы = %5.5f\n", gaussMatrix.determinant());
+        printMatrix(gaussMatrix);
     }
 
 }
