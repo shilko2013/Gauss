@@ -85,6 +85,7 @@ public class MatrixIO {
         System.out.println("Данные успешно введены.");
         return new GaussMatrix(matrix);
     }
+
     /*
     формат файла:
     n(n+1) чисел через любые пробельные символы, в конце файла комментарий после символов //
@@ -100,7 +101,7 @@ public class MatrixIO {
             return null;
         }
         try {
-            numbers = in.tokens().takeWhile(s->!s.startsWith("//")).mapToDouble(num -> Double.parseDouble(num.replaceAll(",", "."))).toArray();
+            numbers = in.tokens().takeWhile(s -> !s.startsWith("//")).mapToDouble(num -> Double.parseDouble(num.replaceAll(",", "."))).toArray();
             count = numbers.length;
             n = (int) Math.ceil((-1 + Math.sqrt(1 + 4 * count)) / 2);
             count = 0;
@@ -167,7 +168,7 @@ public class MatrixIO {
         gaussMatrix.triangleMatrix();
         System.out.printf("Определитель матрицы = %5.5f\n", gaussMatrix.determinant());
         printMatrix(gaussMatrix);
-        printValues(gaussMatrix.roots(),true);
+        printValues(gaussMatrix.roots(), true);
         printValues(gaussMatrix.discrepancies(), false);
     }
 
@@ -177,7 +178,7 @@ public class MatrixIO {
     public static void printValues(double[] roots, boolean areRoots) {
         String token = areRoots ? "x" : "δ";
         for (int i = 0; i < roots.length; ++i)
-            System.out.printf(token + (i+1) + " = %5.16f\n", roots[i]);
+            System.out.printf(token + (i + 1) + " = %5.16f\n", roots[i]);
         System.out.println();
     }
 
