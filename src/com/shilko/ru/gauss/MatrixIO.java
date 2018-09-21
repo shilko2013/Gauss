@@ -176,9 +176,9 @@ public class MatrixIO {
     @param areRoots - если true, то печатает корни, иначе - невязки
      */
     public static void printValues(double[] roots, boolean areRoots) {
-        String token = areRoots ? "x" : "δ";
+        String token = areRoots ? "x" : "ε";
         for (int i = 0; i < roots.length; ++i)
-            System.out.printf(token + (i + 1) + " = %5.16f\n", roots[i]);
+            System.out.printf(token + (i + 1) + " = %5.18f\n", roots[i]);
         System.out.println();
     }
 

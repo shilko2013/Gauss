@@ -114,7 +114,7 @@ public class GaussMatrix {
             equalVars[iteration] = equalVars[maxj];
             equalVars[maxj] = temp;
 
-            MatrixIO.printMatrix(this);
+            //MatrixIO.printMatrix(this); for DEBUGGING!!!
         }
 
         return this;
