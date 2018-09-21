@@ -6,13 +6,19 @@ import static java.lang.Math.*;
 
 public class GaussMatrix {
     private double[][] matrix;
+    private int[] equalVars;
 
     public static void main(String... args) {
-        MatrixIO.printMatrix(MatrixIO.readMatrix("matrix.txt").gauss());
+        //MatrixIO.printMatrix(MatrixIO.readMatrix("matrix.txt").gauss());
+        new GaussMatrix(20).gauss();
     }
 
     public double[][] getMatrix() {
         return matrix;
+    }
+
+    public int[] getEqualVars() {
+        return equalVars;
     }
 
     private void setMatrix(double[][] matrix) {
@@ -21,6 +27,7 @@ public class GaussMatrix {
 
     public GaussMatrix(double[][] matrix) {
         setMatrix(matrix);
+        feelEqualVars();
     }
 
     public GaussMatrix(int n) {
@@ -33,6 +40,7 @@ public class GaussMatrix {
         setMatrix(new double[n][n + 1]);
         if (randomInit)
             randomInit();
+        feelEqualVars();
     }
 
     public GaussMatrix randomInit() {
@@ -52,22 +60,23 @@ public class GaussMatrix {
         return this;
     }
 
-    public GaussMatrix gauss() { //changes matrix
-
-        var equalVars = new int[matrix.length];
-
+    private void feelEqualVars() {
+        equalVars = new int[matrix.length];
         for (int i = 0; i < matrix.length; ++i) //заполнение таблицы соответствия столбца переменной
             equalVars[i] = i;
+    }
+
+    public GaussMatrix gauss() { //changes matrix
 
         for (int iteration = 0; iteration < matrix.length - 1; ++iteration) {
 
-            int n = matrix.length - iteration;
+            int n = matrix.length;
 
-            double max = matrix[0][0];
-            int maxi = 0, maxj = 0;
+            double max = matrix[iteration][iteration];
+            int maxi = iteration, maxj = iteration;
 
-            for (int i = 0; i < n; ++i) { //поиск наибольшего по модулю коэффициента
-                for (int j = 0; j < n; ++j) {
+            for (int i = iteration; i < n; ++i) { //поиск наибольшего по модулю коэффициента
+                for (int j = iteration; j < n; ++j) {
                     if (abs(matrix[i][j]) > abs(max)) {
                         max = matrix[i][j];
                         maxi = i;
@@ -77,24 +86,24 @@ public class GaussMatrix {
             }
 
             double[] koef = new double[n]; //нахождение коэффициентов для умножения строк
-            for (int i = 0; i < n; ++i)
+            for (int i = iteration; i < n; ++i)
                 koef[i] = -matrix[i][maxj] / max;
 
-            for (int i = 0; i < n; ++i) { //сложение строк
-                for (int j = 0; j < n + 1; ++j) {
+            for (int i = iteration; i < n; ++i) { //сложение строк
+                for (int j = iteration; j < n + 1; ++j) {
                     if (i == maxi)
                         continue;
                     matrix[i][j] += matrix[maxi][j] * koef[i];
                 }
             }
 
-            for (int j = 0; j < n + 1; ++j) { //формирование треугольной матрицы
+            for (int j = iteration; j < n + 1; ++j) { //формирование треугольной матрицы
                 double temp = matrix[iteration][j];
                 matrix[iteration][j] = matrix[maxi][j];
                 matrix[maxi][j] = temp;
             }
 
-            for (int i = 0; i < n; ++i) {
+            for (int i = iteration; i < n; ++i) {
                 double temp = matrix[i][iteration];
                 matrix[i][iteration] = matrix[i][maxj];
                 matrix[i][maxj] = temp;

@@ -59,7 +59,7 @@ public class MatrixIO {
         for (int i = 0; i < n; ++i)
             try {
                 for (int j = 0; j < n + 1; ++j)
-                    matrix[i][j] = Double.parseDouble(in.next().replaceAll(",","."));
+                    matrix[i][j] = Double.parseDouble(in.next().replaceAll(",", "."));
             } catch (Exception e) {
                 System.out.println("Произошла ошибка ввода, пожалуйста, введите последнюю строчку заново.");
                 in.nextLine();
@@ -80,7 +80,7 @@ public class MatrixIO {
             return null;
         }
         try {
-            numbers = in.tokens().mapToDouble(num->Double.parseDouble(num.replaceAll(",","."))).toArray();
+            numbers = in.tokens().mapToDouble(num -> Double.parseDouble(num.replaceAll(",", "."))).toArray();
             count = numbers.length;
             n = (int) Math.ceil((-1 + Math.sqrt(1 + 4 * count)) / 2);
             count = 0;
@@ -101,9 +101,17 @@ public class MatrixIO {
     }
 
     public static void printMatrix(GaussMatrix gaussMatrix, PrintStream out) {
+        final int fieldWidth = 10;
+        final int precision = 5;
+        for (int i = 0; i < gaussMatrix.getMatrix().length; ++i) {
+            String temp = "x" + (gaussMatrix.getEqualVars()[i]+1);
+            out.printf("%"+fieldWidth+"s", temp);
+        }
+        out.printf("%"+fieldWidth+"c", 'b');
+        out.println();
         for (int i = 0; i < gaussMatrix.getMatrix().length; ++i) {
             for (int j = 0; j < gaussMatrix.getMatrix()[0].length; ++j)
-                out.print(gaussMatrix.getMatrix()[i][j] + " ");
+                out.printf("%" + fieldWidth + "." + precision + "f ", gaussMatrix.getMatrix()[i][j]);
             out.println();
         }
     }
