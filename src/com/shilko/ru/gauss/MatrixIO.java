@@ -6,8 +6,8 @@ import java.util.*;
 public class MatrixIO {
 
     public static void main(String... args) {
-        //MatrixIO.gauss(MatrixIO.readMatrix("matrix.txt"));
-        MatrixIO.gauss(new GaussMatrix(20));
+        MatrixIO.gauss(MatrixIO.readMatrix("matrix.txt"));
+        //MatrixIO.gauss(new GaussMatrix(20));
     }
 
     public static GaussMatrix readMatrix() {
@@ -150,6 +150,13 @@ public class MatrixIO {
         gaussMatrix.triangleMatrix();
         System.out.printf("Определитель матрицы = %5.5f\n", gaussMatrix.determinant());
         printMatrix(gaussMatrix);
+        printRoots(gaussMatrix.roots());
+    }
+
+    public static void printRoots(double[] roots) {
+        for (int i = 0; i < roots.length; ++i)
+            System.out.printf("x" + i + " = %5.5f", roots[i]);
+        System.out.println();
     }
 
 }

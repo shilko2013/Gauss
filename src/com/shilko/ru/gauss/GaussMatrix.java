@@ -6,10 +6,15 @@ import static java.lang.Math.*;
 
 public class GaussMatrix {
     private double[][] matrix;
+    private final double[][] originalMatrix;
     private int[] equalVars;
 
     public double[][] getMatrix() {
         return matrix;
+    }
+
+    public double[][] getOriginalMatrix() {
+        return originalMatrix;
     }
 
     public int[] getEqualVars() {
@@ -23,6 +28,7 @@ public class GaussMatrix {
     public GaussMatrix(double[][] matrix) {
         setMatrix(matrix);
         feelEqualVars();
+        originalMatrix = matrix;
     }
 
     public GaussMatrix(int n) {
@@ -36,6 +42,7 @@ public class GaussMatrix {
         if (randomInit)
             randomInit();
         feelEqualVars();
+        originalMatrix = matrix;
     }
 
     public GaussMatrix randomInit() {
@@ -118,4 +125,15 @@ public class GaussMatrix {
             acc *= matrix[i][i];
         return acc;
     } //работает только после triangleMatrix()
+
+    public double[] roots() { //работает только после triangleMatrix()
+        var roots = new double[matrix.length];
+
+
+
+        //roots[matrix.length - 1] = matrix[matrix.length-1][matrix[0].length-1] / matrix[matrix.length-1][matrix[0].length-2];
+        //roots[matrix.length - 2] = matrix[matrix.length-2][matrix[0].length-1] - matrix[matrix.length-2][matrix[0].length-2]*roots[matrix.length - 1] / matrix[matrix.length-2][matrix[0].length-3];
+
+        return roots;
+    }
 }
