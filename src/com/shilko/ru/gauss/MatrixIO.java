@@ -85,7 +85,10 @@ public class MatrixIO {
         System.out.println("Данные успешно введены.");
         return new GaussMatrix(matrix);
     }
-
+    /*
+    формат файла:
+    n(n+1) чисел через любые пробельные символы, в конце файла комментарий после символов //
+     */
     public static GaussMatrix readMatrix(String fileName) {
         Scanner in;
         int count, n;
@@ -97,7 +100,7 @@ public class MatrixIO {
             return null;
         }
         try {
-            numbers = in.tokens().mapToDouble(num -> Double.parseDouble(num.replaceAll(",", "."))).toArray();
+            numbers = in.tokens().takeWhile(s->!s.startsWith("//")).mapToDouble(num -> Double.parseDouble(num.replaceAll(",", "."))).toArray();
             count = numbers.length;
             n = (int) Math.ceil((-1 + Math.sqrt(1 + 4 * count)) / 2);
             count = 0;
