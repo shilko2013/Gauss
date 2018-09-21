@@ -33,12 +33,13 @@ public class GaussMatrix {
             randomInit();
     }
 
-    public void randomInit() {
+    public GaussMatrix randomInit() {
         final int MAX_RANDOM_VALUE = 100;
         randomInit(MAX_RANDOM_VALUE);
+        return this;
     }
 
-    public void randomInit(int MAX_RANDOM_VALUE) {
+    public GaussMatrix randomInit(int MAX_RANDOM_VALUE) {
         var random = new Random();
         for (int i = 0; i < matrix.length; ++i)
             for (int j = 0; j < matrix[0].length; ++j) {
@@ -46,7 +47,10 @@ public class GaussMatrix {
                 if (random.nextBoolean())
                     matrix[i][j] *= -1;
             }
+            return this;
     }
 
+    public void gauss() {
 
+    }
 }

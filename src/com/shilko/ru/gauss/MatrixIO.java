@@ -59,7 +59,7 @@ public class MatrixIO {
         for (int i = 0; i < n; ++i)
             try {
                 for (int j = 0; j < n + 1; ++j)
-                    matrix[i][j] = in.nextInt();
+                    matrix[i][j] = Double.parseDouble(in.next().replaceAll(",","."));
             } catch (Exception e) {
                 System.out.println("Произошла ошибка ввода, пожалуйста, введите последнюю строчку заново.");
                 in.nextLine();
