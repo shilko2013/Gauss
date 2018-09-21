@@ -4,6 +4,7 @@ import java.io.*;
 import java.util.*;
 
 public class MatrixIO {
+
     public static GaussMatrix readMatrix() {
         Scanner in = new Scanner(System.in);
         while (true) {
@@ -79,7 +80,7 @@ public class MatrixIO {
             return null;
         }
         try {
-            numbers = in.tokens().mapToDouble(Double::parseDouble).toArray();
+            numbers = in.tokens().mapToDouble(num->Double.parseDouble(num.replaceAll(",","."))).toArray();
             count = numbers.length;
             n = (int) Math.ceil((-1 + Math.sqrt(1 + 4 * count)) / 2);
             count = 0;
@@ -106,4 +107,5 @@ public class MatrixIO {
             out.println();
         }
     }
+
 }
