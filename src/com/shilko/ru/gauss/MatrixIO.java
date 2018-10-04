@@ -8,7 +8,10 @@ public class MatrixIO {
     public static void main(String... args) {
         MatrixIO.printHeader();
         while (true) {
-            MatrixIO.gauss(readMatrix());
+            GaussMatrix gaussMatrix = readMatrix();
+            System.out.println("Введенная матрица: ");
+            MatrixIO.printMatrix(gaussMatrix);
+            MatrixIO.gauss(gaussMatrix);
         }
     }
 
@@ -20,7 +23,8 @@ public class MatrixIO {
         Scanner in = new Scanner(System.in);
         while (true) {
             try {
-                System.out.print("Для начала работы введите 0 чтобы ввести матрицу с клавиатуры," +
+                System.out.print("Для начала работы введите" +
+                        "\n 0 чтобы ввести матрицу с клавиатуры," +
                         "\n 1 для заполнения случайными значениями," +
                         "\n 2 для считывания из файла " +
                         "\n q или 3 для выхода из программы: ");
@@ -82,7 +86,6 @@ public class MatrixIO {
                 in.nextLine();
                 i--;
             }
-        System.out.println("Данные успешно введены.");
         return new GaussMatrix(matrix);
     }
 
@@ -110,9 +113,11 @@ public class MatrixIO {
                 for (int j = 0; j < n + 1; ++j)
                     matrix[i][j] = numbers[count++];
             System.out.println("Данные успешно введены.");
+            in.close();
             return new GaussMatrix(matrix);
         } catch (Exception e) {
             System.out.println("Неверный формат файла!");
+            in.close();
             return null;
         }
     }
@@ -166,7 +171,12 @@ public class MatrixIO {
 
     public static void gauss(GaussMatrix gaussMatrix) {
         gaussMatrix.triangleMatrix();
-        System.out.printf("Определитель матрицы = %5.5f\n", gaussMatrix.determinant());
+        final double determinant = gaussMatrix.determinant();
+        if (determinant == 0 || Double.isNaN(determinant)) {
+            System.out.println("Данную СЛАУ невозможно решить методом главных элементов, повторите ввод!");
+            return;
+        }
+        System.out.println("Определитель матрицы = " + determinant);
         printMatrix(gaussMatrix);
         printValues(gaussMatrix.roots(), true);
         printValues(gaussMatrix.discrepancies(), false);
@@ -178,7 +188,8 @@ public class MatrixIO {
     public static void printValues(double[] roots, boolean areRoots) {
         String token = areRoots ? "x" : "ε";
         for (int i = 0; i < roots.length; ++i)
-            System.out.printf(token + (i + 1) + " = %5.18f\n", roots[i]);
+            //System.out.printf(token + (i + 1) + " = %5.18f\n", roots[i]);
+            System.out.println(token + (i + 1)+ " = " + roots[i]);
         System.out.println();
     }
 

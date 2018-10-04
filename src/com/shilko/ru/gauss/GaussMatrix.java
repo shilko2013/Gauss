@@ -69,9 +69,8 @@ public class GaussMatrix {
     }
 
     public GaussMatrix triangleMatrix() {
-        for (int iteration = 0; iteration < matrix.length - 1; ++iteration) {
-
-            int n = matrix.length;
+        int n = matrix.length;
+        for (int iteration = 0; iteration < n - 1; ++iteration) {
 
             double max = matrix[iteration][iteration];
             int maxi = iteration, maxj = iteration;
@@ -114,7 +113,7 @@ public class GaussMatrix {
             equalVars[iteration] = equalVars[maxj];
             equalVars[maxj] = temp;
 
-            //MatrixIO.printMatrix(this); for DEBUGGING!!!
+            //MatrixIO.printMatrix(this); //for DEBUGGING!!!
         }
 
         return this;
